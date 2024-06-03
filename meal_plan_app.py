@@ -1,7 +1,5 @@
 import random
-import pandas as pd
 import streamlit as st
-from datetime import datetime, timedelta
 
 # Function to fetch nutrient data (dummy data used here for simplicity)
 def get_food_nutrients(food):
@@ -119,6 +117,36 @@ def generate_weekly_meal_plan(selection):
 # Streamlit app
 st.set_page_config(page_title="Customizable Weekly Meal Plan Generator", layout="wide")
 
+st.markdown("""
+<style>
+    .main {
+        background-color: #f0f2f6;
+    }
+    h1 {
+        color: #4CAF50;
+    }
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .stDownloadButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .highlight {
+        background-color: #ffeb3b;
+        padding: 5px;
+    }
+    .meal-time {
+        font-weight: bold;
+        color: #4CAF50;
+    }
+    .meal-food {
+        color: #333;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("Customizable Weekly Meal Plan Generator")
 st.write("Select your meal plan criteria and generate a customized weekly meal plan with breakfast, lunch, dinner, and snacks.")
 
@@ -130,15 +158,17 @@ if st.button("Generate Weekly Meal Plan"):
     weekly_meal_plan = generate_weekly_meal_plan(selection)
     st.write(f"Meal Plan: {selection}")
     
-    for day, meals in weekly_meal_plan.items():
-        st.header(day)
-        for meal_time, foods in meals.items():
-            st.subheader(meal_time)
-            for food, nutrients in foods.items():
-                st.markdown(f"**{food}**")
-                st.write(f"Calories: {nutrients['calories']} kcal")
-                st.write(f"Protein: {nutrients['protein']} g")
-                st.write(f"Fat: {nutrients['fat']} g")
-                st.write(f"Carbs: {nutrients['carbs']} g")
-                st.write("---")
+    days = list(weekly_meal_plan.keys())
+    cols = st.columns(len(days))
 
+    for col, day in zip(cols, days):
+        col.header(day)
+        for meal_time, foods in weekly_meal_plan[day].items():
+            col.markdown(f"<div class='meal-time'>{meal_time}</div>", unsafe_allow_html=True)
+            for food, nutrients in foods.items():
+                col.markdown(f"<div class='meal-food'><strong>{food}</strong></div>", unsafe_allow_html=True)
+                col.write(f"Calories: {nutrients['calories']} kcal")
+                col.write(f"Protein: {nutrients['protein']} g")
+                col.write(f"Fat: {nutrients['fat']} g")
+                col.write(f"Carbs: {nutrients['carbs']} g")
+                col.write("---")
