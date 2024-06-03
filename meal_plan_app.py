@@ -40,99 +40,105 @@ def get_food_nutrients(food):
 # Meal plan options
 meal_plans = {
     "Weekly Meal Prep for Busy Professionals": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Tacos"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Budget-Friendly Meal Plans": {
-        "Breakfast": ["Oatmeal", "Bananas"],
-        "Lunch": ["Rice", "Lentils", "Frozen Veggies"],
-        "Dinner": ["Rice", "Lentils", "Frozen Veggies"],
-        "Snack": ["Peanut Butter", "Bananas"]
+        "Breakfast": ["Oatmeal", "Bananas", "Eggs", "Overnight Oats", "Greek Yogurt"],
+        "Lunch": ["Rice", "Lentils", "Frozen Veggies", "Chickpeas", "Mixed Veggies"],
+        "Dinner": ["Rice", "Lentils", "Frozen Veggies", "Chickpeas", "Mixed Veggies"],
+        "Snack": ["Peanut Butter", "Bananas", "Cherry Tomatoes", "Eggs", "Mixed Greens"]
     },
     "Seasonal Meal Planning": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Greek Salad", "Quinoa"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Falafel"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Moussaka", "Enchiladas"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Family-Friendly Meal Plans": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Tacos"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Plant-Based Meal Plans": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chickpea Salad", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chickpea Salad", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chickpea Salad", "Quinoa", "Mixed Veggies", "Greek Salad", "Falafel"],
+        "Dinner": ["Chickpea Salad", "Quinoa", "Mixed Veggies", "Moussaka", "Enchiladas"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Fitness-Focused Meal Plans": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Souvlaki"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Quick and Easy Dinner Plans": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Tacos"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Healthy Snacks and Small Meals": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Tacos"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     },
     "Cultural and International Meal Plans": {
-        "Breakfast": ["Greek Yogurt", "Bananas"],
-        "Lunch": ["Tacos", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Curry", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Spring Rolls"]
+        "Breakfast": ["Greek Yogurt", "Bananas", "Oatmeal", "Eggs", "Overnight Oats"],
+        "Lunch": ["Tacos", "Quinoa", "Mixed Veggies", "Biryani", "Souvlaki"],
+        "Dinner": ["Chicken Curry", "Quinoa", "Mixed Veggies", "Pho", "Dim Sum"],
+        "Snack": ["Chickpeas", "Spring Rolls", "Peanut Butter", "Bananas", "Falafel"]
     },
     "Meal Plans for Dietary Restrictions": {
-        "Breakfast": ["Overnight Oats", "Bananas"],
-        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Greek Salad", "Tacos"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies", "Chicken Curry", "Fried Rice"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter", "Bananas", "Spring Rolls"]
     }
 }
 
-# Generate meal plan based on selected criteria
-def generate_meal_plan(selection):
+# Generate weekly meal plan based on selected criteria
+def generate_weekly_meal_plan(selection):
     selected_plan = meal_plans.get(selection, {})
-    meal_plan = {
-        "Breakfast": {food: get_food_nutrients(food) for food in selected_plan.get("Breakfast", [])},
-        "Lunch": {food: get_food_nutrients(food) for food in selected_plan.get("Lunch", [])},
-        "Dinner": {food: get_food_nutrients(food) for food in selected_plan.get("Dinner", [])},
-        "Snack": {food: get_food_nutrients(food) for food in selected_plan.get("Snack", [])}
-    }
-    return meal_plan
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    weekly_plan = {day: {} for day in days}
+    
+    for day in days:
+        for meal_time in ["Breakfast", "Lunch", "Dinner", "Snack"]:
+            foods = selected_plan.get(meal_time, [])
+            if foods:
+                food = random.choice(foods)
+                weekly_plan[day][meal_time] = {food: get_food_nutrients(food)}
+    
+    return weekly_plan
 
 # Streamlit app
-st.set_page_config(page_title="Customizable Meal Plan Generator", layout="wide")
+st.set_page_config(page_title="Customizable Weekly Meal Plan Generator", layout="wide")
 
-st.title("Customizable Meal Plan Generator")
-st.write("Select your meal plan criteria and generate a customized meal plan with breakfast, lunch, dinner, and snacks.")
+st.title("Customizable Weekly Meal Plan Generator")
+st.write("Select your meal plan criteria and generate a customized weekly meal plan with breakfast, lunch, dinner, and snacks.")
 
 # User selection
 selection = st.selectbox("Choose your meal plan criteria:", list(meal_plans.keys()))
 
 # Generate and display meal plan
-if st.button("Generate Meal Plan"):
-    meal_plan = generate_meal_plan(selection)
+if st.button("Generate Weekly Meal Plan"):
+    weekly_meal_plan = generate_weekly_meal_plan(selection)
     st.write(f"Meal Plan: {selection}")
     
-    for meal_time, foods in meal_plan.items():
-        st.subheader(meal_time)
-        for food, nutrients in foods.items():
-            st.markdown(f"**{food}**")
-            st.write(f"Calories: {nutrients['calories']} kcal")
-            st.write(f"Protein: {nutrients['protein']} g")
-            st.write(f"Fat: {nutrients['fat']} g")
-            st.write(f"Carbs: {nutrients['carbs']} g")
-            st.write("---")
+    for day, meals in weekly_meal_plan.items():
+        st.header(day)
+        for meal_time, foods in meals.items():
+            st.subheader(meal_time)
+            for food, nutrients in foods.items():
+                st.markdown(f"**{food}**")
+                st.write(f"Calories: {nutrients['calories']} kcal")
+                st.write(f"Protein: {nutrients['protein']} g")
+                st.write(f"Fat: {nutrients['fat']} g")
+                st.write(f"Carbs: {nutrients['carbs']} g")
+                st.write("---")
 
