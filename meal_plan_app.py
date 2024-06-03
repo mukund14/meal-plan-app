@@ -3,105 +3,136 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta
 
-# Define high-protein recipes
-recipes = {
-    "Breakfast": [
-        {"name": "Greek Yogurt Parfait", "protein": 25},
-        {"name": "Scrambled Tofu", "protein": 20},
-        {"name": "Protein Smoothie", "protein": 24},
-        {"name": "Oatmeal with Protein Powder", "protein": 20},
-        {"name": "Chia Seed Pudding", "protein": 15}
-    ],
-    "Lunch": [
-        {"name": "Quinoa and Black Bean Salad", "protein": 16},
-        {"name": "Lentil Soup", "protein": 18},
-        {"name": "Chickpea Salad", "protein": 15},
-        {"name": "Tofu Stir-Fry", "protein": 22},
-        {"name": "Veggie Burger", "protein": 20}
-    ],
-    "Dinner": [
-        {"name": "Lentil and Vegetable Stir-Fry", "protein": 22},
-        {"name": "Vegetarian Chili", "protein": 20},
-        {"name": "Stuffed Bell Peppers with Quinoa and Beans", "protein": 18},
-        {"name": "Vegetable Curry with Tofu", "protein": 20},
-        {"name": "Spaghetti with Lentil Bolognese", "protein": 22}
-    ],
-    "Snacks": [
-        {"name": "Hummus with Veggies", "protein": 10},
-        {"name": "Cottage Cheese with Pineapple", "protein": 25},
-        {"name": "Protein Bars", "protein": 20},
-        {"name": "Roasted Chickpeas", "protein": 15},
-        {"name": "Edamame", "protein": 17}
-    ]
+# Function to fetch nutrient data (dummy data used here for simplicity)
+def get_food_nutrients(food):
+    nutrients = {
+        "Chicken Breast": {"calories": 165, "protein": 31, "fat": 3.6, "carbs": 0},
+        "Quinoa": {"calories": 222, "protein": 8, "fat": 3.6, "carbs": 39},
+        "Mixed Veggies": {"calories": 50, "protein": 2, "fat": 0.5, "carbs": 10},
+        "Mixed Greens": {"calories": 5, "protein": 0.5, "fat": 0.1, "carbs": 1},
+        "Chickpeas": {"calories": 180, "protein": 10, "fat": 3, "carbs": 30},
+        "Cherry Tomatoes": {"calories": 15, "protein": 1, "fat": 0.2, "carbs": 3},
+        "Feta Cheese": {"calories": 100, "protein": 5, "fat": 8, "carbs": 1},
+        "Overnight Oats": {"calories": 300, "protein": 10, "fat": 8, "carbs": 50},
+        "Rice": {"calories": 130, "protein": 2.7, "fat": 0.3, "carbs": 28},
+        "Lentils": {"calories": 116, "protein": 9, "fat": 0.4, "carbs": 20},
+        "Frozen Veggies": {"calories": 40, "protein": 2, "fat": 0.2, "carbs": 8},
+        "Peanut Butter": {"calories": 190, "protein": 8, "fat": 16, "carbs": 6},
+        "Bananas": {"calories": 105, "protein": 1.3, "fat": 0.3, "carbs": 27},
+        "Oatmeal": {"calories": 150, "protein": 5, "fat": 2.5, "carbs": 27},
+        "Eggs": {"calories": 70, "protein": 6, "fat": 5, "carbs": 1},
+        "Greek Salad": {"calories": 150, "protein": 4, "fat": 10, "carbs": 11},
+        "Tacos": {"calories": 200, "protein": 10, "fat": 12, "carbs": 15},
+        "Chicken Curry": {"calories": 250, "protein": 20, "fat": 10, "carbs": 15},
+        "Fried Rice": {"calories": 300, "protein": 7, "fat": 12, "carbs": 40},
+        "Pho": {"calories": 350, "protein": 15, "fat": 5, "carbs": 60},
+        "Souvlaki": {"calories": 250, "protein": 20, "fat": 15, "carbs": 10},
+        "Falafel": {"calories": 180, "protein": 6, "fat": 10, "carbs": 15},
+        "Moussaka": {"calories": 400, "protein": 20, "fat": 25, "carbs": 25},
+        "Enchiladas": {"calories": 300, "protein": 15, "fat": 20, "carbs": 25},
+        "Biryani": {"calories": 400, "protein": 20, "fat": 15, "carbs": 50},
+        "Dim Sum": {"calories": 150, "protein": 8, "fat": 5, "carbs": 20},
+        "Spring Rolls": {"calories": 200, "protein": 5, "fat": 10, "carbs": 25},
+        # Add more foods as needed
+    }
+    return nutrients.get(food, {"calories": 0, "protein": 0, "fat": 0, "carbs": 0})
+
+# Meal plan options
+meal_plans = {
+    "Weekly Meal Prep for Busy Professionals": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Budget-Friendly Meal Plans": {
+        "Breakfast": ["Oatmeal", "Bananas"],
+        "Lunch": ["Rice", "Lentils", "Frozen Veggies"],
+        "Dinner": ["Rice", "Lentils", "Frozen Veggies"],
+        "Snack": ["Peanut Butter", "Bananas"]
+    },
+    "Seasonal Meal Planning": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Greek Salad", "Quinoa"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Family-Friendly Meal Plans": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Plant-Based Meal Plans": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chickpea Salad", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chickpea Salad", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Fitness-Focused Meal Plans": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Quick and Easy Dinner Plans": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Healthy Snacks and Small Meals": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    },
+    "Cultural and International Meal Plans": {
+        "Breakfast": ["Greek Yogurt", "Bananas"],
+        "Lunch": ["Tacos", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Curry", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Spring Rolls"]
+    },
+    "Meal Plans for Dietary Restrictions": {
+        "Breakfast": ["Overnight Oats", "Bananas"],
+        "Lunch": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Dinner": ["Chicken Breast", "Quinoa", "Mixed Veggies"],
+        "Snack": ["Chickpeas", "Cherry Tomatoes"]
+    }
 }
 
-# Generate the monthly meal plan
-def generate_monthly_meal_plan():
-    today = datetime.today()
-    days = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(30)]
-    meal_plan = {day: {"Breakfast": None, "Lunch": None, "Dinner": None, "Snack 1": None, "Snack 2": None} for day in days}
-    
-    for day in days:
-        meal_plan[day]["Breakfast"] = random.choice(recipes["Breakfast"])
-        meal_plan[day]["Lunch"] = random.choice(recipes["Lunch"])
-        meal_plan[day]["Dinner"] = random.choice(recipes["Dinner"])
-        meal_plan[day]["Snack 1"] = random.choice(recipes["Snacks"])
-        meal_plan[day]["Snack 2"] = random.choice(recipes["Snacks"])
-    
+# Generate meal plan based on selected criteria
+def generate_meal_plan(selection):
+    selected_plan = meal_plans.get(selection, {})
+    meal_plan = {
+        "Breakfast": {food: get_food_nutrients(food) for food in selected_plan.get("Breakfast", [])},
+        "Lunch": {food: get_food_nutrients(food) for food in selected_plan.get("Lunch", [])},
+        "Dinner": {food: get_food_nutrients(food) for food in selected_plan.get("Dinner", [])},
+        "Snack": {food: get_food_nutrients(food) for food in selected_plan.get("Snack", [])}
+    }
     return meal_plan
 
-# Create the meal plan
-monthly_meal_plan = generate_monthly_meal_plan()
-
-# Convert the meal plan to a DataFrame for better visualization
-meal_plan_df = pd.DataFrame(monthly_meal_plan).transpose()
-
 # Streamlit app
-st.set_page_config(page_title="Monthly High-Protein Vegetarian Meal Plan", layout="wide")
+st.set_page_config(page_title="Customizable Meal Plan Generator", layout="wide")
 
-st.title("Monthly High-Protein Vegetarian Meal Plan")
-st.markdown("""
-<style>
-    .main {
-        background-color: #f0f2f6;
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-    }
-    .stDownloadButton>button {
-        background-color: #4CAF50;
-        color: white;
-    }
-    h1 {
-        color: #4CAF50;
-    }
-    .highlight {
-        background-color: #ffeb3b;
-        padding: 5px;
-    }
-</style>
-""", unsafe_allow_html=True)
+st.title("Customizable Meal Plan Generator")
+st.write("Select your meal plan criteria and generate a customized meal plan with breakfast, lunch, dinner, and snacks.")
 
-st.write("Here is your high-protein vegetarian meal plan for the month:")
+# User selection
+selection = st.selectbox("Choose your meal plan criteria:", list(meal_plans.keys()))
 
-today_str = datetime.today().strftime('%Y-%m-%d')
+# Generate and display meal plan
+if st.button("Generate Meal Plan"):
+    meal_plan = generate_meal_plan(selection)
+    st.write(f"Meal Plan: {selection}")
+    
+    for meal_time, foods in meal_plan.items():
+        st.subheader(meal_time)
+        for food, nutrients in foods.items():
+            st.markdown(f"**{food}**")
+            st.write(f"Calories: {nutrients['calories']} kcal")
+            st.write(f"Protein: {nutrients['protein']} g")
+            st.write(f"Fat: {nutrients['fat']} g")
+            st.write(f"Carbs: {nutrients['carbs']} g")
+            st.write("---")
 
-# Display the meal plan with expandable sections for each day
-for day in meal_plan_df.index:
-    highlight = "highlight" if day == today_str else ""
-    with st.expander(f"{day} {'(Today)' if day == today_str else ''}"):
-        st.markdown(f"<div class='{highlight}'><strong>Breakfast:</strong> {meal_plan_df.loc[day, 'Breakfast']['name']} ({meal_plan_df.loc[day, 'Breakfast']['protein']}g protein)</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='{highlight}'><strong>Lunch:</strong> {meal_plan_df.loc[day, 'Lunch']['name']} ({meal_plan_df.loc[day, 'Lunch']['protein']}g protein)</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='{highlight}'><strong>Dinner:</strong> {meal_plan_df.loc[day, 'Dinner']['name']} ({meal_plan_df.loc[day, 'Dinner']['protein']}g protein)</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='{highlight}'><strong>Snack 1:</strong> {meal_plan_df.loc[day, 'Snack 1']['name']} ({meal_plan_df.loc[day, 'Snack 1']['protein']}g protein)</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='{highlight}'><strong>Snack 2:</strong> {meal_plan_df.loc[day, 'Snack 2']['name']} ({meal_plan_df.loc[day, 'Snack 2']['protein']}g protein)</div>", unsafe_allow_html=True)
-
-# Download meal plan as CSV
-csv = meal_plan_df.to_csv(index=True).encode('utf-8')
-st.download_button(
-    label="Download Meal Plan as CSV",
-    data=csv,
-    file_name='monthly_meal_plan.csv',
-    mime='text/csv',
-)
