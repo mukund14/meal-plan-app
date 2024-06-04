@@ -5,24 +5,24 @@ import streamlit as st
 def get_food_nutrients(food):
     nutrients = {
         "Chicken Breast": {"calories": 165, "protein": 31, "fat": 3.6, "carbs": 0},
-        "Quinoa Salad": {"calories": 222, "protein": 8, "fat": 3.6, "carbs": 39},
+        "Quinoa": {"calories": 120, "protein": 4, "fat": 2, "carbs": 21},
+        "Chickpeas": {"calories": 180, "protein": 10, "fat": 3, "carbs": 30},
         "Mixed Veggies": {"calories": 50, "protein": 2, "fat": 0.5, "carbs": 10},
         "Mixed Greens": {"calories": 5, "protein": 0.5, "fat": 0.1, "carbs": 1},
-        "Chickpeas": {"calories": 180, "protein": 10, "fat": 3, "carbs": 30},
         "Cherry Tomatoes": {"calories": 15, "protein": 1, "fat": 0.2, "carbs": 3},
         "Feta Cheese": {"calories": 100, "protein": 5, "fat": 8, "carbs": 1},
         "Overnight Oats": {"calories": 300, "protein": 10, "fat": 8, "carbs": 50},
-        "Rice and Beans": {"calories": 250, "protein": 9, "fat": 1, "carbs": 50},
-        "Lentil Soup": {"calories": 180, "protein": 12, "fat": 2, "carbs": 30},
-        "Frozen Veggies Stir-fry": {"calories": 150, "protein": 4, "fat": 2, "carbs": 25},
-        "Peanut Butter Toast": {"calories": 190, "protein": 8, "fat": 16, "carbs": 6},
+        "Rice": {"calories": 130, "protein": 2.7, "fat": 0.3, "carbs": 28},
+        "Lentils": {"calories": 116, "protein": 9, "fat": 0.4, "carbs": 20},
+        "Tofu": {"calories": 70, "protein": 8, "fat": 4, "carbs": 2},
+        "Peanut Butter": {"calories": 190, "protein": 8, "fat": 16, "carbs": 6},
         "Bananas": {"calories": 105, "protein": 1.3, "fat": 0.3, "carbs": 27},
         "Oatmeal": {"calories": 150, "protein": 5, "fat": 2.5, "carbs": 27},
         "Eggs": {"calories": 70, "protein": 6, "fat": 5, "carbs": 1},
-        "Greek Salad": {"calories": 150, "protein": 4, "fat": 10, "carbs": 11},
+        "Greek Yogurt": {"calories": 100, "protein": 10, "fat": 0, "carbs": 6},
         "Tacos": {"calories": 200, "protein": 10, "fat": 12, "carbs": 15},
         "Chicken Curry": {"calories": 250, "protein": 20, "fat": 10, "carbs": 15},
-        "Fried Rice with Tofu": {"calories": 300, "protein": 10, "fat": 10, "carbs": 40},
+        "Fried Rice": {"calories": 250, "protein": 6, "fat": 10, "carbs": 35},
         "Berries": {"calories": 85, "protein": 1, "fat": 0.5, "carbs": 21},
         "Watermelon": {"calories": 46, "protein": 0.9, "fat": 0.2, "carbs": 12},
         "Oranges": {"calories": 62, "protein": 1.2, "fat": 0.2, "carbs": 15},
@@ -36,67 +36,78 @@ def get_food_nutrients(food):
     }
     return nutrients.get(food, {"calories": 0, "protein": 0, "fat": 0, "carbs": 0})
 
+# Combine nutrients of multiple foods
+def combine_nutrients(foods):
+    combined = {"calories": 0, "protein": 0, "fat": 0, "carbs": 0}
+    for food in foods:
+        nutrients = get_food_nutrients(food)
+        combined["calories"] += nutrients["calories"]
+        combined["protein"] += nutrients["protein"]
+        combined["fat"] += nutrients["fat"]
+        combined["carbs"] += nutrients["carbs"]
+    return combined
+
 # Meal plan options
 meal_plans = {
     "Weekly Meal Prep for Busy Professionals": {
-        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Tacos"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Budget-Friendly Meal Plans": {
-        "Breakfast": ["Oatmeal with Berries", "Bananas", "Eggs", "Overnight Oats", "Greek Yogurt"],
-        "Lunch": ["Rice and Beans", "Lentil Soup", "Frozen Veggies Stir-fry with Tofu", "Chickpeas and Mixed Veggies"],
-        "Dinner": ["Rice and Beans", "Lentil Soup", "Frozen Veggies Stir-fry with Tofu", "Chickpeas and Mixed Veggies"],
-        "Snack": ["Peanut Butter Toast", "Bananas", "Cherry Tomatoes", "Mixed Greens"]
+        "Breakfast": [["Oatmeal", "Berries"], ["Bananas"], ["Eggs"], ["Overnight Oats", "Apples"], ["Greek Yogurt"]],
+        "Lunch": [["Rice", "Lentils"], ["Lentil Soup"], ["Frozen Veggies", "Tofu"], ["Chickpeas", "Mixed Veggies"]],
+        "Dinner": [["Rice", "Beans"], ["Lentil Soup"], ["Frozen Veggies Stir-fry", "Tofu"], ["Chickpeas", "Mixed Veggies"]],
+        "Snack": [["Peanut Butter", "Bananas"], ["Cherry Tomatoes"], ["Mixed Greens"], ["Berries"]]
     },
     "Seasonal Meal Planning": {
-        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Falafel"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Moussaka", "Enchiladas"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Falafel"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Moussaka"], ["Enchiladas"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Family-Friendly Meal Plans": {
-        "Breakfast": ["Overnight Oats", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Tacos"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Plant-Based Meal Plans": {
-        "Breakfast": ["Overnight Oats with Almond Milk", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Mixed Veggies with Tofu", "Greek Salad with Feta", "Falafel"],
-        "Dinner": ["Lentil Soup with Mixed Greens", "Fried Rice with Tofu", "Moussaka", "Enchiladas"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Mixed Veggies", "Tofu"], ["Greek Salad", "Feta Cheese"], ["Falafel"]],
+        "Dinner": [["Lentil Soup", "Mixed Greens"], ["Fried Rice", "Tofu"], ["Moussaka"], ["Enchiladas"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Fitness-Focused Meal Plans": {
-        "Breakfast": ["Overnight Oats with Almond Milk", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Souvlaki"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Souvlaki"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Quick and Easy Dinner Plans": {
-        "Breakfast": ["Overnight Oats with Almond Milk", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Tacos"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Healthy Snacks and Small Meals": {
-        "Breakfast": ["Overnight Oats with Almond Milk", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Tacos"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Cultural and International Meal Plans": {
-        "Breakfast": ["Greek Yogurt", "Bananas", "Oatmeal with Berries", "Eggs", "Overnight Oats"],
-        "Lunch": ["Tacos", "Quinoa Salad with Chickpeas", "Mixed Veggies with Tofu", "Biryani", "Souvlaki"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens", "Pho", "Dim Sum"],
-        "Snack": ["Chickpeas", "Spring Rolls", "Peanut Butter Toast", "Bananas", "Falafel"]
+        "Breakfast": [["Greek Yogurt", "Berries"], ["Bananas"], ["Oatmeal", "Apples"], ["Eggs"]],
+        "Lunch": [["Tacos"], ["Quinoa", "Chickpeas"], ["Mixed Veggies", "Tofu"], ["Biryani"], ["Souvlaki"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"], ["Pho"], ["Dim Sum"]],
+        "Snack": [["Chickpeas"], ["Spring Rolls"], ["Peanut Butter", "Bananas"], ["Berries"]]
     },
     "Meal Plans for Dietary Restrictions": {
-        "Breakfast": ["Overnight Oats with Almond Milk", "Bananas", "Greek Yogurt", "Oatmeal with Berries", "Eggs"],
-        "Lunch": ["Quinoa Salad with Chickpeas", "Chicken Breast with Mixed Veggies", "Greek Salad with Feta", "Tacos"],
-        "Dinner": ["Chicken Curry with Rice", "Fried Rice with Tofu", "Lentil Soup with Mixed Greens"],
-        "Snack": ["Chickpeas", "Cherry Tomatoes", "Peanut Butter Toast", "Berries"]
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
     }
 }
 
@@ -110,8 +121,9 @@ def generate_weekly_meal_plan(selection):
         for meal_time in ["Breakfast", "Lunch", "Dinner", "Snack"]:
             foods = selected_plan.get(meal_time, [])
             if foods:
-                food = random.choice(foods)
-                weekly_plan[day][meal_time] = {food: get_food_nutrients(food)}
+                food_combination = random.choice(foods)
+                nutrients = combine_nutrients(food_combination)
+                weekly_plan[day][meal_time] = {"foods": food_combination, "nutrients": nutrients}
     
     return weekly_plan
 
@@ -169,12 +181,13 @@ if st.button("Generate Weekly Meal Plan"):
 
     for col, day in zip(cols, days):
         col.header(day)
-        for meal_time, foods in weekly_meal_plan[day].items():
+        for meal_time, meal_info in weekly_meal_plan[day].items():
             col.markdown(f"<div class='meal-time'>{meal_time}</div>", unsafe_allow_html=True)
-            for food, nutrients in foods.items():
-                col.markdown(f"<div class='meal-food'><strong>{food}</strong></div>", unsafe_allow_html=True)
-                col.write(f"Calories: {nutrients['calories']} kcal")
-                col.write(f"Protein: {nutrients['protein']} g")
-                col.write(f"Fat: {nutrients['fat']} g")
-                col.write(f"Carbs: {nutrients['carbs']} g")
-                col.write("---")
+            foods = meal_info["foods"]
+            nutrients = meal_info["nutrients"]
+            col.markdown(f"<div class='meal-food'><strong>{', '.join(foods)}</strong></div>", unsafe_allow_html=True)
+            col.write(f"Calories: {nutrients['calories']} kcal")
+            col.write(f"Protein: {nutrients['protein']} g")
+            col.write(f"Fat: {nutrients['fat']} g")
+            col.write(f"Carbs: {nutrients['carbs']} g")
+            col.write("---")
