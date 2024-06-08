@@ -37,7 +37,7 @@ def get_food_nutrients(food):
         "Cashew Milk": {"calories": 25, "protein": 1, "fat": 2, "carbs": 1, "quantity": "1 cup", "servings": 1},
         "Oat Milk": {"calories": 120, "protein": 3, "fat": 5, "carbs": 16, "quantity": "1 cup", "servings": 1},
     }
-    return nutrients.get(food, {"calories": 0, "protein": 0, "fat": 0, "carbs": 0, "quantity": "0", "servings": 0})
+    return nutrients.get(food, {"calories": 0, "protein": 0, "fat": 0, "carbs": 0, "quantity": "Unknown", "servings": "Unknown"})
 
 # Combine nutrients of multiple foods
 def combine_nutrients(foods):
@@ -150,7 +150,7 @@ def create_daily_nutrient_chart(total_nutrients):
 
 # Function to fetch recipe and image
 def get_recipe_and_image(food):
-    api_key = 'a229eced5b4f4bf3b02afb26fece3d64'
+    api_key = 'YOUR_SPOONACULAR_API_KEY'
     url = f"https://api.spoonacular.com/recipes/complexSearch?query={food}&number=1&apiKey={api_key}"
     response = requests.get(url)
     data = response.json()
