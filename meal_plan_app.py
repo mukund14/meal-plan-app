@@ -150,7 +150,7 @@ def create_daily_nutrient_chart(total_nutrients):
 
 # Function to fetch recipe and image
 def get_recipe_and_image(food):
-    api_key = 'YOUR_SPOONACULAR_API_KEY'
+    api_key = 'a229eced5b4f4bf3b02afb26fece3d64'
     url = f"https://api.spoonacular.com/recipes/complexSearch?query={food}&number=1&apiKey={api_key}"
     response = requests.get(url)
     data = response.json()
