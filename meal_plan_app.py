@@ -1,19 +1,9 @@
+import random
+import streamlit as st
+import plotly.express as px
+import plotly.graph_objects as go
 import requests
 
-# Function to fetch recipe and image
-def get_recipe_and_image(food):
-    api_key = 'a229eced5b4f4bf3b02afb26fece3d64'
-    url = f"https://api.spoonacular.com/recipes/complexSearch?query={food}&number=1&apiKey={api_key}"
-    response = requests.get(url)
-    data = response.json()
-    if data["results"]:
-        recipe = data["results"][0]
-        recipe_title = recipe["title"]
-        image_url = recipe["image"]
-        recipe_url = f"https://spoonacular.com/recipes/{recipe['title'].replace(' ', '-').lower()}-{recipe['id']}"
-        return recipe_title, image_url, recipe_url
-    else:
-        return None, None, None
 # Function to fetch nutrient data (dummy data used here for simplicity)
 def get_food_nutrients(food):
     nutrients = {
@@ -49,20 +39,131 @@ def get_food_nutrients(food):
     }
     return nutrients.get(food, {"calories": 0, "protein": 0, "fat": 0, "carbs": 0, "quantity": "0", "servings": 0})
 
-import random
-import streamlit as st
-import plotly.express as px
-import plotly.graph_objects as go
+# Combine nutrients of multiple foods
+def combine_nutrients(foods):
+    combined = {"calories": 0, "protein": 0, "fat": 0, "carbs": 0}
+    for food in foods:
+        nutrients = get_food_nutrients(food)
+        combined["calories"] += nutrients["calories"]
+        combined["protein"] += nutrients["protein"]
+        combined["fat"] += nutrients["fat"]
+        combined["carbs"] += nutrients["carbs"]
+    return combined
 
-# Define function to fetch nutrients (as above)
-# Define function to combine nutrients (as above)
-# Define meal plans (as above)
-# Define function to generate weekly meal plan (as above)
-# Define functions to create Plotly charts (as above)
+# Meal plan options
+meal_plans = {
+    "Weekly Meal Prep for Busy Professionals": {
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Budget-Friendly Meal Plans": {
+        "Breakfast": [["Oatmeal", "Berries"], ["Bananas"], ["Eggs"], ["Overnight Oats", "Apples"], ["Greek Yogurt"]],
+        "Lunch": [["Rice", "Lentils"], ["Lentil Soup"], ["Frozen Veggies", "Tofu"], ["Chickpeas", "Mixed Veggies"]],
+        "Dinner": [["Rice", "Beans"], ["Lentil Soup"], ["Frozen Veggies Stir-fry", "Tofu"], ["Chickpeas", "Mixed Veggies"]],
+        "Snack": [["Peanut Butter", "Bananas"], ["Cherry Tomatoes"], ["Mixed Greens"], ["Berries"]]
+    },
+    "Seasonal Meal Planning": {
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Falafel"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Moussaka"], ["Enchiladas"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Family-Friendly Meal Plans": {
+        "Breakfast": [["Overnight Oats", "Berries"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Apples"], ["Eggs", "Oranges"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Plant-Based Meal Plans": {
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Mixed Veggies", "Tofu"], ["Greek Salad", "Feta Cheese"], ["Falafel"]],
+        "Dinner": [["Lentil Soup", "Mixed Greens"], ["Fried Rice", "Tofu"], ["Moussaka"], ["Enchiladas"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Fitness-Focused Meal Plans": {
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Souvlaki"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Quick and Easy Dinner Plans": {
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Healthy Snacks and Small Meals": {
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Cultural and International Meal Plans": {
+        "Breakfast": [["Greek Yogurt", "Berries"], ["Bananas"], ["Oatmeal", "Apples"], ["Eggs"]],
+        "Lunch": [["Tacos"], ["Quinoa", "Chickpeas"], ["Mixed Veggies", "Tofu"], ["Biryani"], ["Souvlaki"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"], ["Pho"], ["Dim Sum"]],
+        "Snack": [["Chickpeas"], ["Spring Rolls"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    },
+    "Meal Plans for Dietary Restrictions": {
+        "Breakfast": [["Overnight Oats", "Almond Milk"], ["Bananas", "Greek Yogurt"], ["Oatmeal", "Berries"], ["Eggs"]],
+        "Lunch": [["Quinoa", "Chickpeas"], ["Chicken Breast", "Mixed Veggies"], ["Greek Salad", "Feta Cheese"], ["Tacos"]],
+        "Dinner": [["Chicken Curry", "Rice"], ["Fried Rice", "Tofu"], ["Lentil Soup", "Mixed Greens"]],
+        "Snack": [["Chickpeas"], ["Cherry Tomatoes"], ["Peanut Butter", "Bananas"], ["Berries"]]
+    }
+}
 
-# Function to fetch recipe and image (as above)
+# Generate weekly meal plan based on selected criteria
+def generate_weekly_meal_plan(selection):
+    selected_plan = meal_plans.get(selection, {})
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    weekly_plan = {day: {} for day in days}
+    
+    for day in days:
+        for meal_time in ["Breakfast", "Lunch", "Dinner", "Snack"]:
+            foods = selected_plan.get(meal_time, [])
+            if foods:
+                food_combination = random.choice(foods)
+                nutrients = combine_nutrients(food_combination)
+                weekly_plan[day][meal_time] = {"foods": food_combination, "nutrients": nutrients}
+    
+    return weekly_plan
 
-# Streamlit app setup
+# Create Plotly bar chart for meal nutrients
+def create_nutrient_chart(meal_info):
+    nutrients = meal_info["nutrients"]
+    data = {
+        "Nutrient": ["Calories", "Protein", "Fat", "Carbs"],
+        "Amount": [nutrients["calories"], nutrients["protein"], nutrients["fat"], nutrients["carbs"]]
+    }
+    fig = px.bar(data, x="Nutrient", y="Amount", title="Meal Nutrient Composition")
+    return fig
+
+# Create Plotly pie chart for total daily nutrients
+def create_daily_nutrient_chart(total_nutrients):
+    labels = ["Protein", "Fat", "Carbs"]
+    values = [total_nutrients["protein"], total_nutrients["fat"], total_nutrients["carbs"]]
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+    fig.update_layout(title_text="Total Daily Nutrient Intake")
+    return fig
+
+# Function to fetch recipe and image
+def get_recipe_and_image(food):
+    api_key = 'YOUR_SPOONACULAR_API_KEY'
+    url = f"https://api.spoonacular.com/recipes/complexSearch?query={food}&number=1&apiKey={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    if data["results"]:
+        recipe = data["results"][0]
+        recipe_title = recipe["title"]
+        image_url = recipe["image"]
+        recipe_url = f"https://spoonacular.com/recipes/{recipe['title'].replace(' ', '-').lower()}-{recipe['id']}"
+        return recipe_title, image_url, recipe_url
+    else:
+        return None, None, None
+
+# Streamlit app
 st.set_page_config(page_title="Customizable Weekly Meal Plan Generator", layout="wide")
 
 st.markdown("""
