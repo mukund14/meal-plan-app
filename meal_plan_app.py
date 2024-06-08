@@ -1,5 +1,7 @@
 import random
 import streamlit as st
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Function to fetch nutrient data (dummy data used here for simplicity)
 def get_food_nutrients(food):
@@ -127,6 +129,24 @@ def generate_weekly_meal_plan(selection):
     
     return weekly_plan
 
+# Create Plotly bar chart for meal nutrients
+def create_nutrient_chart(meal_info):
+    nutrients = meal_info["nutrients"]
+    data = {
+        "Nutrient": ["Calories", "Protein", "Fat", "Carbs"],
+        "Amount": [nutrients["calories"], nutrients["protein"], nutrients["fat"], nutrients["carbs"]]
+    }
+    fig = px.bar(data, x="Nutrient", y="Amount", title="Meal Nutrient Composition")
+    return fig
+
+# Create Plotly pie chart for total daily nutrients
+def create_daily_nutrient_chart(total_nutrients):
+    labels = ["Protein", "Fat", "Carbs"]
+    values = [total_nutrients["protein"], total_nutrients["fat"], total_nutrients["carbs"]]
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+    fig.update_layout(title_text="Total Daily Nutrient Intake")
+    return fig
+
 # Streamlit app
 st.set_page_config(page_title="Customizable Weekly Meal Plan Generator", layout="wide")
 
@@ -181,13 +201,20 @@ if st.button("Generate Weekly Meal Plan"):
 
     for col, day in zip(cols, days):
         col.header(day)
+        daily_total_nutrients = {"calories": 0, "protein": 0, "fat": 0, "carbs": 0}
         for meal_time, meal_info in weekly_meal_plan[day].items():
             col.markdown(f"<div class='meal-time'>{meal_time}</div>", unsafe_allow_html=True)
             foods = meal_info["foods"]
             nutrients = meal_info["nutrients"]
+            daily_total_nutrients["calories"] += nutrients["calories"]
+            daily_total_nutrients["protein"] += nutrients["protein"]
+            daily_total_nutrients["fat"] += nutrients["fat"]
+            daily_total_nutrients["carbs"] += nutrients["carbs"]
             col.markdown(f"<div class='meal-food'><strong>{', '.join(foods)}</strong></div>", unsafe_allow_html=True)
-            col.write(f"Calories: {nutrients['calories']} kcal")
-            col.write(f"Protein: {nutrients['protein']} g")
-            col.write(f"Fat: {nutrients['fat']} g")
-            col.write(f"Carbs: {nutrients['carbs']} g")
-            col.write("---")
+            col.plotly_chart(create_nutrient_chart(meal_info))
+        col.plotly_chart(create_daily_nutrient_chart(daily_total_nutrients))
+        col.write(f"Total Calories: {daily_total_nutrients['calories']} kcal")
+        col.write(f"Total Protein: {daily_total_nutrients['protein']} g")
+        col.write(f"Total Fat: {daily_total_nutrients['fat']} g")
+        col.write(f"Total Carbs: {daily_total_nutrients['carbs']} g")
+        col.write("---")
