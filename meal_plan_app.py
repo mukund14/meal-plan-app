@@ -41,13 +41,17 @@ def get_food_nutrients(food):
 
 # Combine nutrients of multiple foods
 def combine_nutrients(foods):
-    combined = {"calories": 0, "protein": 0, "fat": 0, "carbs": 0}
+    combined = {"calories": 0, "protein": 0, "fat": 0, "carbs": 0, "quantity": [], "servings": []}
     for food in foods:
         nutrients = get_food_nutrients(food)
         combined["calories"] += nutrients["calories"]
         combined["protein"] += nutrients["protein"]
         combined["fat"] += nutrients["fat"]
         combined["carbs"] += nutrients["carbs"]
+        combined["quantity"].append(nutrients["quantity"])
+        combined["servings"].append(nutrients["servings"])
+    combined["quantity"] = ", ".join(combined["quantity"])
+    combined["servings"] = ", ".join(map(str, combined["servings"]))
     return combined
 
 # Meal plan options
