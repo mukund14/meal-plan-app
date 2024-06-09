@@ -154,18 +154,18 @@ def create_daily_nutrient_chart(total_nutrients):
 
 # Function to fetch recipe and image
 def get_recipe_and_image(food):
-    api_key = 'YOUR_SPOONACULAR_API_KEY'
+    api_key = 'a229eced5b4f4bf3b02afb26fece3d64'
     url = f"https://api.spoonacular.com/recipes/complexSearch?query={food}&number=1&apiKey={api_key}"
     response = requests.get(url)
-    data = response.json()
-    if data["results"]:
-        recipe = data["results"][0]
-        recipe_title = recipe["title"]
-        image_url = recipe["image"]
-        recipe_url = f"https://spoonacular.com/recipes/{recipe['title'].replace(' ', '-').lower()}-{recipe['id']}"
-        return recipe_title, image_url, recipe_url
-    else:
-        return None, None, None
+    if response.status_code == 200:
+        data = response.json()
+        if "results" in data and data["results"]:
+            recipe = data["results"][0]
+            recipe_title = recipe["title"]
+            image_url = recipe["image"]
+            recipe_url = f"https://spoonacular.com/recipes/{recipe['title'].replace(' ', '-').lower()}-{recipe['id']}"
+            return recipe_title, image_url, recipe_url
+    return None, None, None
 
 # Streamlit app
 st.set_page_config(page_title="Customizable Weekly Meal Plan Generator", layout="wide")
